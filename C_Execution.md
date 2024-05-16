@@ -32,16 +32,18 @@
 ##### Compatibility layer in 64-bit OS for running 32-bit applications
 <details>
 <summary>Expand</summary>
-* Separate subsystem for 32-bit applications:
+
+##### Separate subsystem for 32-bit applications:
 - On linux, this is often achieved through multiarch support, where libraries and runtime environments for both 32-bit and 64-bit applications are installed side by side. When a 32-bit application runs, the 32-bit versions of system libraries are loaded.
 
-* Redirection of system calls:
+##### Redirection of system calls:
 - When a 32-bit application makes a system call, the compatibility layer intercepts it and translates it into a corresponding 64-bit system call that the operating system can understand.
 - This involves mapping 32-bit memory addresses to 64-bit memory addresses and handling differences in data structures and function signatures.
 
-* Handling Execution Contexts:
+##### Handling Execution Contexts:
 - The compatibility layer manages the CPU modes, ensuring that the processor can switch between 32-bit and 64-bit modes as needed. It also ensures that the application's execution context such as registers, stack etc is appropriately set up for 32-bit code execution.
 </details>
+
 - A 32-bit CPU cannot execute 64-bit instructions because it has imcompatible registers, buses to handles 64-bit data. Even if the hardware somehow supported it, a 32-bit operating system wouldn't be able to manage the large memory address space and the 64-bit registers effectively, thus affecting the execution performance.
 
 #### Architecture for data storage
