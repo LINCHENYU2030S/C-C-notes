@@ -3,7 +3,8 @@
 * C Basics
     * [Step by step compilation of C Program ](#step-by-step-compilation-of-c-program)
     * [A Basic Computer Architecture ](#a-basic-computer-architecture)
-    * [Some shortcuts for VScode IDE](#some-shortcuts-for-vscode-ide)
+    * [Some shortcuts for VScode IDE ](#some-shortcuts-for-vscode-ide)
+    * [Data type in C ](#data-type-in-c)
 
 --------------------------------------------------------
 
@@ -73,3 +74,13 @@
 - option + up/down (windows: alt +up/down): move selected line(s) up or down
 
 
+--------------------------------------------------------
+
+### Data type in C
+
+#### Categories of data types
+- Fundamental data type: char(1 byte), short(2 bytes), int(4 bytes), long(4bytes in windows and 32-bit linux, 8bytes in 64-bit linux), float(4bytes), double(8 bytes, higher precision)
+
+#### Some keywords
+- extern: Just tell the compiler there exist some variable in our program, OS does not allocate new memory for just this line of code
+- const: declare a variable to be constant so that we can't change the value stored in the memory address corresponding to that variable name. (But still can change the value through its memory address)
