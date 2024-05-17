@@ -83,4 +83,4 @@
 
 #### Some keywords
 - extern: Just tell the compiler there exist some variable in our program, OS does not allocate new memory for just this line of code
-- const: declare a variable to be constant so that we can't change the value stored in the memory address corresponding to that variable name. (But still can change the value through its memory address)
+- const: declare a variable to be constant so that we can't change the value stored in the memory address corresponding to that variable name through variable name. (But still can change the value through its memory address)
