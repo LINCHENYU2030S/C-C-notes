@@ -3,6 +3,9 @@
 * C Basics
     * [Step by step compilation of C Program ](#step-by-step-compilation-of-c-program)
     * [A Basic Computer Architecture ](#a-basic-computer-architecture)
+    * [Some shortcuts for VScode IDE](#some-shortcuts-for-vscode-ide)
+
+--------------------------------------------------------
 
 ### Step by step compilation of C Program
 
@@ -12,6 +15,7 @@
 - Eliminate comments
 - Does not check syntax error.
 - Syntax for conditional compilation: #if 0 ... #endif or # if 1 ... #endif (0 means false, 1 means true)
+- Other preprocessing commands such as #define _CRT_SECURE_NO_WARNINGS or  #pragma warning(disable:4996) to ignore warnings
 
 #### Compilation: gcc -S filename.i -o filename.s
 - Convert the preprocessed file into assembly file
@@ -22,6 +26,8 @@
 
 #### Link: gcc filname.o -o filename
 - set up execution environment, heap and stack etc and link to library code.
+
+--------------------------------------------------------
 
 ### A Basic Computer Architecture
 
@@ -50,3 +56,20 @@
 - Registers: Closest to CPU. A hardware that temporarily stores the data and provide very fast data access for CPU. 
 - Cache: 2nd Closest to CPU. A hardware that tries to store "the next most likely needed" data (depending on how the cache is implemented, LRU is one possible implementation). A high cache hit rate improves the execution performance.
 - RAM: 3rd Closest to CPU. A physical memory space that stores text(code to be executed), data, heap, and stack(There is a mapping between virtual memory space and physical memory space).
+
+
+--------------------------------------------------------
+
+### Some shortcuts for VScode IDE
+- ctrl+k, ctrl+f: autocorrect code format
+- ctrl+k, ctrl+c: comments selected code
+- ctrl+k, ctrl+u: uncomments selected lines
+- F9: set breakpoint
+- F5: run and debug
+- ctrl + F5: run only
+- ctrl + shift + b: compile only
+- F10: next 
+- F11: step
+- option + up/down (windows: alt +up/down): move selected line(s) up or down
+
+
