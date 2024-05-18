@@ -79,8 +79,16 @@
 ### Data type in C
 
 #### Categories of data types
-- Fundamental data type: char(1 byte), short(2 bytes), int(4 bytes), long(4bytes in windows and 32-bit linux, 8bytes in 64-bit linux), float(4bytes), double(8 bytes, higher precision)
+- Fundamental data type: char(1 byte), short(2 bytes), int(4 bytes), long(4bytes in windows and 32-bit linux, 8bytes in 64-bit linux), float(4bytes, 7 significant numbers), double(8 bytes, higher precision, 15 significant numbers)
 
 #### Some keywords
 - extern: Just tell the compiler there exist some variable in our program, OS does not allocate new memory for just this line of code
 - const: declare a variable to be constant so that we can't change the value stored in the memory address corresponding to that variable name through variable name. (But still can change the value through its memory address)
+- volatile: tell the compiler not to improve the code involving a particular variable.
+- register: recommend the OS to define a particular variable on a register(if there exist a free register) to enhance the efficiency.
+
+
+#### Signed vs Unsigned:
+- difference: signed can represent both positive and negative and zero values while unsigned can only represent nonnegative values, thus their range is different.
+- Negative representation in Signed Integer: Take complement and plus one.
+- Note: If you assign a 10-based value to a variable, you are assigning the binary that is taken complement and plus one. But if you assign a 8-based or 16-based value to a variable in C, then you are assigning the equivalent binary to that variable(without taking complement and plus one, because assumed to be complement number),
