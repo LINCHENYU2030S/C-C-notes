@@ -80,7 +80,7 @@
 
 #### Categories of data types
 - Fundamental data type: char(1 byte), short(2 bytes), int(4 bytes), long(4bytes in windows and 32-bit linux, 8bytes in 64-bit linux), float(4bytes, 7 significant numbers), double(8 bytes, higher precision, 15 significant numbers)
-
+- Array of some other data type: Used to group data of the same type in contiguous memory. The name of the array is like a constant name of an address(the address of the first element of the array), in other words, it is a pointer! Thus, we have &array[0] == array == &array. One thing to note is both &array[0] + 1 and array + 1 are used to skip to the next element of the array, but &array + 1 skip the whole array.
 #### Some keywords
 - extern: Just tell the compiler there exist some variable in our program, OS does not allocate new memory for just this line of code
 - const: declare a variable to be constant so that we can't change the value stored in the memory address corresponding to that variable name through variable name. (But still can change the value through its memory address)
@@ -92,3 +92,10 @@
 - difference: signed can represent both positive and negative and zero values while unsigned can only represent nonnegative values, thus their range is different.
 - Negative representation in Signed Integer: Take complement and plus one.
 - Note: If you assign a 10-based value to a variable, you are assigning the binary that is taken complement and plus one. But if you assign a 8-based or 16-based value to a variable in C, then you are assigning the equivalent binary to that variable(without taking complement and plus one, because assumed to be complement number),
+
+#### Type conversion:
+- In order to make sure that there will not be any data loss, we normally convert a smaller in size data type to a bigger one(or at least same size). For example, converting from char to int, from int to double, from int to float etc. If we do the other way around, some data may loss, for example:
+```c
+int a = 12345678;
+char b = (char) a; // three bytes of data will loss
+```
