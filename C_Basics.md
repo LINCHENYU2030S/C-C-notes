@@ -5,7 +5,7 @@
     * [A Basic Computer Architecture ](#a-basic-computer-architecture)
     * [Some shortcuts for VScode IDE ](#some-shortcuts-for-vscode-ide)
     * [Data type in C ](#data-type-in-c)
-    * [Input/Output method ](#inputoutput-method)
+    * [Input/Output methods ](#inputoutput-method)
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
