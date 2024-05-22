@@ -5,7 +5,7 @@
     * [A Basic Computer Architecture ](#a-basic-computer-architecture)
     * [Some shortcuts for VScode IDE ](#some-shortcuts-for-vscode-ide)
     * [Data type in C ](#data-type-in-c)
-
+    * [Input/Output method ](#inputoutput-method)
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
@@ -17,6 +17,22 @@
 - Does not check syntax error.
 - Syntax for conditional compilation: #if 0 ... #endif or # if 1 ... #endif (0 means false, 1 means true)
 - Other preprocessing commands such as #define _CRT_SECURE_NO_WARNINGS or  #pragma warning(disable:4996) to ignore warnings
+- To prevent repeating defining function especially in header file:
+```c
+#ifndef _FILENAME_H_  //means if _FILENAME_H_ has not yet been defined, then we enter and define it.
+#define _FILENAME_H_
+
+int func(int a, int b);
+int haha(char a, char b);
+
+#endif
+// or equivalently we can do:
+#pragma once
+
+int func(int a, int b);
+int haha(char a, char b);
+```
+
 
 #### Compilation: gcc -S filename.i -o filename.s
 - Convert the preprocessed file into assembly file
@@ -98,4 +114,67 @@
 ```c
 int a = 12345678;
 char b = (char) a; // three bytes of data will loss
+```
+
+--------------------------------------------------------
+
+### Input/Output method
+
+#### scanf (read until either space or \n is encountered)
+- use: scanf("%format", memory address), for example:
+```c
+int a = 0;
+scanf("%d", &a);
+
+char b = 0;
+scanf("%c", &b);
+
+char c[5] = {0};
+scanf("%s", c); // c itself is a constant to the array memory address
+```
+
+- disadvantage: in the case of reading string into a char[] variable, if the size of input string is bigger than the size of char[] variable, memory pollution will occur. for example:
+```c
+char string[5] = {0};
+scanf("%s", string); 
+// if user input like helloworld which has length bigger than 5, scanf method will just read starting from the address given until all of the word "helloworld" is read in, in which memory not belong to the char array will be overridden.
+```
+
+#### gets (read until \n is encountered, will read in space)
+- use : gets(* char)
+- disadvantage: the memory pollution as described in the scanf method will also occur here.
+
+#### fgets(read until \n is encountered or maximum size is reached)
+- use: fgets(*char, max_size, input stream) //will read in at most max_size - 1 of chars and automatically add in \n
+- example of use:
+```c
+char a[128];
+fgets(a, sizeof(a), stdin); //will read in at most 127 of chars and then add in \n
+```
+- disadvantage: will read in \n as well, but we can resolve it as follow:
+```c
+#include <string.h>
+//...
+//...
+char a[128] = {0};
+fgets(a, sizeof(a), stdin);
+a[strlen(a) - 1] = 0; // /0 is equivalent as value 0
+```
+
+#### puts (write a string, include \n)
+- use: puts(addres of the first element of the string)
+- example of use:
+```c
+char a[128];
+fgets(a, sizeof(a), stdin);
+puts(a); // equivalent to printf("%s\n", a);
+```
+
+#### fputs(write a string to any file, does not include \n)
+- use: fputs(address of the first element of the string, file you want to write to)
+- example of use:
+```c
+char a[128];
+fgets(a, sizeof(a), stdin);
+fputs(a, stdout); // equivalent to printf("%s", a);
 ```
