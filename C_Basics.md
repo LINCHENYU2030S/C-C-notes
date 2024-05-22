@@ -6,6 +6,7 @@
     * [Some shortcuts for VScode IDE ](#some-shortcuts-for-vscode-ide)
     * [Data type in C ](#data-type-in-c)
     * [Input/Output methods ](#inputoutput-method)
+    * [Pointers ]()
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
@@ -177,4 +178,38 @@ puts(a); // equivalent to printf("%s\n", a);
 char a[128];
 fgets(a, sizeof(a), stdin);
 fputs(a, stdout); // equivalent to printf("%s", a);
+```
+
+--------------------------------------------------------
+
+### Pointers
+- What is pointer? Answer: pointer is just a logical memory address
+- Pointer variable: a variable that stores a logical memory address
+- Why do we need char *, short *, int * different types of pointer variable since they are all just some variable stores 4 bytes(or 8 bytes) of memory address value. Answer: When we do dereferencing, the number of bytes of data accessed are different, depending of the type of pointer. Their differences are shown as follow:
+```c
+int num = 0x12345678;
+
+char *pointer1 = (char *) &num;
+short *pointer2 = (short *) &num;
+int *pointer2 = &num;
+
+printf("%x ", *pointer1);
+printf("%x ", *pointer2);
+printf("%x ", *pointer3);
+/*
+The output would be
+78 5678 12345679
+The reason is pointer1 is of type char *, when we dereference it it will just access one byte of data given by the address. The same reason for pointer2, since pointer2 is of type short *, *pointer2 will just access 2 bytes of data, 1 byte from exactly what pointer2 is storing and 1 byte from the following byte.
+*/
+
+
+//Another difference
+printf("%x ", pointer1 + 1);
+printf("%x ", pointer2 + 1);
+printf("%x ", pointer3 + 1);
+/*
+One possible output would be (assuming the address of num is 0x00000000)
+0x00000001 0x00000002 0x00000004
+(+ 1byte)  (+ 2bytes)  (+ 4bytes)
+*/
 ```
