@@ -6,7 +6,7 @@
     * [Some shortcuts for VScode IDE ](#some-shortcuts-for-vscode-ide)
     * [Data type in C ](#data-type-in-c)
     * [Input/Output methods ](#inputoutput-method)
-    * [Pointers ]()
+    * [Pointers ](#pointers)
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
@@ -146,11 +146,11 @@ scanf("%s", string);
 - disadvantage: the memory pollution as described in the scanf method will also occur here.
 
 #### fgets(read until \n is encountered or maximum size is reached)
-- use: fgets(*char, max_size, input stream) //will read in at most max_size - 1 of chars and automatically add in \n
+- use: fgets(*char, max_size, input stream) //will read in at most max_size - 1 of chars and automatically add in \0
 - example of use:
 ```c
 char a[128];
-fgets(a, sizeof(a), stdin); //will read in at most 127 of chars and then add in \n
+fgets(a, sizeof(a), stdin); //will read in at most 127 of chars and then add in \0
 ```
 - disadvantage: will read in \n as well, but we can resolve it as follow:
 ```c
@@ -162,7 +162,7 @@ fgets(a, sizeof(a), stdin);
 a[strlen(a) - 1] = 0; // /0 is equivalent as value 0
 ```
 
-#### puts (write a string, include \n)
+#### puts (write a string to stdout, automatically include \n)
 - use: puts(addres of the first element of the string)
 - example of use:
 ```c
@@ -171,7 +171,7 @@ fgets(a, sizeof(a), stdin);
 puts(a); // equivalent to printf("%s\n", a);
 ```
 
-#### fputs(write a string to any file, does not include \n)
+#### fputs(write a string to any file, does not automatically include \n)
 - use: fputs(address of the first element of the string, file you want to write to)
 - example of use:
 ```c
