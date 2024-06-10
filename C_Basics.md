@@ -198,7 +198,7 @@ printf("%x ", *pointer2);
 printf("%x ", *pointer3);
 /*
 The output would be
-78 5678 12345679
+78 5678 12345678
 The reason is pointer1 is of type char *, when we dereference it it will just access one byte of data given by the address. The same reason for pointer2, since pointer2 is of type short *, *pointer2 will just access 2 bytes of data, 1 byte from exactly what pointer2 is storing and 1 byte from the following byte.
 */
 
@@ -211,5 +211,84 @@ printf("%x ", pointer3 + 1);
 One possible output would be (assuming the address of num is 0x00000000)
 0x00000001 0x00000002 0x00000004
 (+ 1byte)  (+ 2bytes)  (+ 4bytes)
+*/
+```
+
+- General Pointer (void *): used to store the address of any data type. Type casting is needed when using it. For example
+```c
+int a = 0;
+void *p = (void *) &a;
+printf("%d", * (int *)p) // type cast p into int * and take dereferencing
+```
+
+- Using keyword "const" to prevent changing content through pointer dereferencing.
+```c
+int a = 10;
+const int *p = &a;
+*p = 100 // fails
+
+// However, the following dereferencing will work
+const int a = 10;
+int *p = &a;
+a = 100; // fail
+*p = 100; // success
+```
+
+- Using keyword "const" to prevent changing pointer's contenct (in contrast to preventing changing the content where the pointer points to ). For example:
+```c
+int a = 10;
+int b = 1;
+int * const p = &a;
+p = &b; // changing where p points to will fail
+
+//Thus, the following will prevent changing the content where pointer points to as well as prevent changing where the pointer pointers to
+const int * const q = &a;
+*q = 12; // fails because of first "const"
+q = &b; // fails because of seecond "const"
+```
+
+- pointer equivalent to array: As we know, the array name is just a constant to a logical memory address, which is just a pointer!. For example we can do:
+```c
+int a[10] = {0};
+int *p = a
+p[0] = 10; // the 0th element of the array is now 10
+a[0] = 11; // the 0th element of the array is now 11
+*(p + 1) = 12; // the 1st element of the array is now 12
+*(a + 1) = 13; // the 1st element of the array is now 13
+// thus a[i] equivalent to *(a + i) equivalent to p[i] equivalent to *(p + i)
+
+// However, the following pointer is different from p, although they stores the same address
+int *q = &a; // q + 1 is different from p + 1, q + 1 will skip the whole array!
+
+// we can still make them to be the same pointer by:
+int *q2 = (int *)&a
+```
+
+- Defining a method accepting an array as parameter: the compiler will convert the parameter of type array to a pointer, thus we will also need to pass the number of elements of the array to the method. For example:
+
+```c
+void fun(int a[100]) { // equivalent to void fun(int *a), no matter int a[100] or int a[1000]
+    // do something
+}
+
+// As such, we normally define such function as:
+void func(int *a, int len) {
+    // do something
+}
+```
+
+- char * vs char []: Most of the cases char * and char [] acts as the same. However, there are different in some behaviour. For example:
+```c
+char a[] = "Hello World";
+a[0] = "K"; //It works.
+
+// However
+char *b = "Hello World"; // Additional Note: when assigning a string constant to a pointer, 
+//the address of the first char in the string will be assigned to the pointer
+b[0] = "K"; // It fails
+*b = "K"; // This fails as well
+/*
+The reason is that the first Hello World is stored in the array 'a' which was 
+preallocated a memory region in the stack while the second Hello World is stored in the constant data region. Changing data content in the constant data region is not allowed.
 */
 ```
