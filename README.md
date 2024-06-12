@@ -1,2 +1,2 @@
 # C-C-notes
-My personal notes for using C/C++
+My personal notes for learning to code
