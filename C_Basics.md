@@ -7,6 +7,7 @@
     * [Data type in C ](#data-type-in-c)
     * [Input/Output methods ](#inputoutput-method)
     * [Pointers ](#pointers)
+    * [Some Useful String Processing Methods ](#some-useful-string-processing-methods)
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
@@ -292,3 +293,56 @@ The reason is that the first Hello World is stored in the array 'a' which was
 preallocated a memory region in the stack while the second Hello World is stored in the constant data region. Changing data content in the constant data region is not allowed.
 */
 ```
+
+- char *[] used to store the memory address of the program parameter(string), for example:
+
+```c
+#include <stdio.h>
+
+int main(int argc, char *argv[]) {
+    printf("%d ", argc)
+    for (int i = 0; i < argc; i++) {
+        printf("%s ", argv[i]);
+    }
+    //Example run: ./ProgramName hello world 1234
+    //Example output: 4 ./ProgramName hello world 1234
+    // Note: ./ProgramName is counted as one program argument
+}
+```
+
+
+--------------------------------------------------------
+### Some useful string processing methods
+- strcpy(char *dest, char *src): copy char starting from the address "src" until \0 is encountered (such \0 is also included in copying) to the address starting from "dest"(by overwriting).
+
+- strncpy(char *dest, char *src, int n): same as strcpy, except that copying is terminated until either n characters are copied(exlusive of \0) or \0 is encountered.
+
+- strcat(char *str1, const char *str2): append the string starting from the address str2 (until \0 is encountered) to after the string starting from the address str1.
+
+- strncat(char *str1, const char *str2, int n): same as strcat, except that concatenation is terminated when either n characters starting from str2 is appended or \0 is encountered. 
+
+- strcmp(char *str1, char *str2): compare the ascii value of the two strings starting from the address str1 and str2. Return 1 if "str1" is bigger than "str2", 0 if their value are equal, -1 otherwise.
+
+- strncmp(char *str1, char *str2, int n): Same as strcmp, except that comparison is done until either n characters are compared or \0 is encountered.
+
+- int sprintf(char *str, const char *format, ...): Instead of printing the final string(after combining with the format) to the standard output, we write such final string to "str" and store in it. When the method ends, it will return the length of the final string.
+
+- int sscanf(const char *buf, const char *format, ...): retrieve data from the string starting from buf according to the format given. Return the number of paramters successfully retrived, return -1 if fails.
+
+- char * strchr(char *str, char chr): find the address of the first occurrence of chr in the string starting from str and return it, return NULL if not found.
+
+- char * strstr(char *str1, char * str2): find the address of the first occurrence of str2 in the string starting from str1 and return it, return NULL if not found.
+
+- char * strtok(char *str, const char *delim): tokenize the string with starting address "str" and return the starting address of first token found. For finding the subsequent token, use NULL as str. The argument "delim" should be the string containing all possible deliminator. Example of use:
+```c
+char str[] = "123#hello$world#hahaha";
+char *token[10] = {NULL};
+token[0] = strtok(str, "#$"); // parse the string by either # or $
+int i = 0;
+while (token[i++] != NULL) {
+    token[i] = strtok(NULL, "#$");
+}
+```
+
+- int atoi(const char *str): convert str from string represention to integer type. Accept "+", "-", "0" to "9" to be in str, if space or "\n" is first encountered, it will skip until acceptable char is found. If other unacceptable char is found, just return 0. Other similar function: atof:convert string to float.
+
