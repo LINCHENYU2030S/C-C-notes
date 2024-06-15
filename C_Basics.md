@@ -9,6 +9,7 @@
     * [Pointers ](#pointers)
     * [Some Useful String Processing Methods ](#some-useful-string-processing-methods)
     * [Variable Scoping ](#variable-scoping)
+    * [Some Useful Memory Processing Methods ](#some-memory-processing-methods)
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
@@ -383,3 +384,45 @@ scoping: can only be invoked from current file.
 - Better not to define global variable in header file (but can extern) to prevent multiple initialization of variable.
 - Different scoping can have variables of the same name.
 
+--------------------------------------------------------
+### Some Memory Processing Methods
+
+* void *memset(void *s, int c, size_t n);
+    * header file: <string.h>
+    * function: starting from address s, override the following n bytes with the value c. Note that c should be an integer between 0 and 255 since we are overriding byte by byte.
+    * Return: address s.
+
+```c
+#include <string.h>
+
+int main() {
+    int a = 10;
+    memset(&a, 0, sizeof(int));
+    printf("%d\n", a); // output 0
+
+    char temp[10] = "haha";
+    memset(temp, 0, sizeof(temp));
+    printf("%s\n", temp); // output ""
+}
+```
+
+* void *memcpy(void * dest, const void *src, size_t n):
+    * header file: <string.h>
+    * function: copy n bytes of data starting from the address src to the memory region starting from dest.
+    * return: address dest
+``` c
+#include <string.h>
+
+int main() {
+    char a [20] = "123\0456\0789";
+    char b [11] = "";
+    char c [11] = "";
+    memcpy(b, a, 10); // b is now "123\0456\078"
+    strncpy(c, a, 10); // c is now "123" because strncpy will stop when encountering \0
+}
+```
+
+* int memcmp(const void *s1, const void *s2, size_t n):
+    * header file: <string.h>
+    * function: compare the first n bytes of s1 and s2.
+    * Return positive if "s1" > "s2", 0 if "s1" == "s2" else negative.
