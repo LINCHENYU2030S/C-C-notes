@@ -426,3 +426,13 @@ int main() {
     * header file: <string.h>
     * function: compare the first n bytes of s1 and s2.
     * Return positive if "s1" > "s2", 0 if "s1" == "s2" else negative.
+```c
+#include <string.h>
+
+int main() {
+    char a[20] = {1, 2, 3, 0, 4, 5, 6, 0};
+    char b[20] = {1, 2, 3, 0, 5, 6, 7, 0};
+    memcmp(a, b, sizseof(a));// -1
+    strcmp(a, b); // 0 since it will stop when encountering 0
+}
+```
