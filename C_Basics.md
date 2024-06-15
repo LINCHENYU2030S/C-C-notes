@@ -8,6 +8,7 @@
     * [Input/Output methods ](#inputoutput-method)
     * [Pointers ](#pointers)
     * [Some Useful String Processing Methods ](#some-useful-string-processing-methods)
+    * [Variable Scoping ](#variable-scoping)
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
@@ -45,6 +46,9 @@ int haha(char a, char b);
 
 #### Link: gcc filname.o -o filename
 - set up execution environment, heap and stack etc and link to library code.
+
+#### Additional Note:
+- After compilation is done, the memory needed for text(code), data(global variable, static variable, constant), and bss(variables that havent been initialised) is "planned" (havent yet been allocated memory).
 
 --------------------------------------------------------
 
@@ -345,4 +349,37 @@ while (token[i++] != NULL) {
 ```
 
 - int atoi(const char *str): convert str from string represention to integer type. Accept "+", "-", "0" to "9" to be in str, if space or "\n" is first encountered, it will skip until acceptable char is found. If other unacceptable char is found, just return 0. Other similar function: atof:convert string to float.
+
+
+--------------------------------------------------------
+### Variable Scoping
+- local variable: (keyword for declaration: auto, can be omitted)
+scoping: inside the closest outer bracket {}
+life duration: from the start of function execution until function execution finishes.
+default value before initialization: random
+
+- static local variable:
+scoping: inside the closest outer bracket {}
+life duration: from the start of program execution until the end of program execution. Operating system will allocate memory for static variable before the execution of main method. The initialization of the static variable will only take place once.
+default value before initialization: 0
+
+- global variable:
+scoping: whole program and all files (need using "extern" keyword in other files)
+life duration: from the start of program execution until the end of program exection. Operating system will allocate memory for global bariable before the execution of main method. The initialization of global variable will only take place once.
+default value before initialization: 0
+
+- static global variable:
+scoping: only current file.
+life duration: from the start of program execution until the end of program exection. Operating system will allocate memory for global bariable before the execution of main method. The initialization of global variable will only take place once.
+default value before initialization: 0
+
+- normal function declaration:
+scoping: can be invoked from all files
+
+- static function declaration:
+scoping: can only be invoked from current file.
+
+#### Additonal Note: 
+- Better not to define global variable in header file (but can extern) to prevent multiple initialization of variable.
+- Different scoping can have variables of the same name.
 
