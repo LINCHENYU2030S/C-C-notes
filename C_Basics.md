@@ -103,7 +103,7 @@ int haha(char a, char b);
 
 #### Categories of data types
 - Fundamental data type: char(1 byte), short(2 bytes), int(4 bytes), long(4bytes in windows and 32-bit linux, 8bytes in 64-bit linux), float(4bytes, 7 significant numbers), double(8 bytes, higher precision, 15 significant numbers)
-- Array of some other data type: Used to group data of the same type in contiguous memory. The name of the array is like a constant name of an address(the address of the first element of the array), in other words, it is a pointer! Thus, we have &array[0] == array == &array. One thing to note is both &array[0] + 1 and array + 1 are used to skip to the next element of the array, but &array + 1 skip the whole array.
+- Array of some other data type(fundamental data type or struct type): Used to group data of the same type in contiguous memory. The name of the array is like a constant name of an address(the address of the first element of the array), in other words, it is a pointer! Thus, we have &array[0] == array == &array. One thing to note is both &array[0] + 1 and array + 1 are used to skip to the next element of the array, but &array + 1 skip the whole array.
 - struct: Unlike array, we can group different data types into one combined data type using struct. Note that if we access the member of our struct data type through its variable name, we use".". On the other hand, if we access the member of the struct data type through its address, we use "->". For example:
 ```c
 struct stu {
