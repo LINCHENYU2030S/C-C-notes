@@ -10,6 +10,7 @@
     * [Some Useful String Processing Methods ](#some-useful-string-processing-methods)
     * [Variable Scoping ](#variable-scoping)
     * [Some Useful Memory Processing Methods ](#some-memory-processing-methods)
+    * [File Handling ](#file-handling)
 --------------------------------------------------------
 
 ### Step by step compilation of C Program
@@ -471,4 +472,62 @@ int main() {
     memcmp(a, b, sizseof(a));// -1
     strcmp(a, b); // 0 since it will stop when encountering 0
 }
+```
+
+--------------------------------------------------------
+### File Handling
+- Files are normally saved in a large memory like hard disk etc. When we want to open a file, the OS will copy it into a faster memory like RAM, and return a struct containing all the information relating to that file.
+
+#### Some useful file handling methods in C
+- fopen("FILE_NAME", MODE): when we invoke this library method, it will return the address of the struct relating to the file as described above, return NULL if it fails to open the file. The struct and the use of 'fopen' method are like below:
+```c
+// struct relating to a file is like:
+typedef struct {
+    short level; // the fullness level of buffer
+    unsigned flags; //the flag of file status
+    char fd; //file descriptor
+    unsigned char hold;
+    short bsize; // buffer size
+    unsigned char *buffer; // the position(address) of the buffer
+    unsigned ar; // current pointer
+    unsigned istemp; //temporary file indicator
+    short token; // used for effiecient checking
+} FILE;
+
+// example use of fopen:
+FILE *p = fopen("a.txt");
+fputc('a', p); // only the address of FILE is needed, the library method fputc will handle those detail inside struct for us.
+```
+<details>
+<summary>MODE Symbols</summary>
+- r: read only, return NULL if file does not exist.
+- w: write only, empty original file content, create new file if the file does not exists.
+- r+: read and write only, return NULL if file does not exist.
+- w+: read and write only, empty original file content, create new file if the file does not exist.
+- a: append only. return NULL if the file does not exist.
+- a+: append only, create new file if the file does not exist.
+</details>
+
+- fclose(FILE *stream) : close the file opened. Example:
+```c
+FILE *f = fopen("a.txt");
+/*
+do something to f
+*/
+fclose(f);
+```
+
+- int fputc(int ch, FILE *stream): convert ch into unsigned char and then write to the file pointed by stream. return the character written if successfult, -1 otherwise. Example:
+```c
+File *fp = fopen("./a.txt", "w");
+if (fp == NULL) {
+    perror("error"); // write error message to the file standard error called stderr
+    return;
+}
+char buff[] = "Hello World";
+int i = -1; 
+while (buf[++i] != 0) {
+    fputc(buf[i], fp);
+}
+fclose(fp); //a.txt now contains Hello World
 ```
