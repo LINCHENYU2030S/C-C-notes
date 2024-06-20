@@ -500,12 +500,13 @@ fputc('a', p); // only the address of FILE is needed, the library method fputc w
 ```
 <details>
 <summary>MODE Symbols</summary>
-- r: read only, return NULL if file does not exist.
+- r: read only, return NULL if file does not exist. 
 - w: write only, empty original file content, create new file if the file does not exists.
 - r+: read and write only, return NULL if file does not exist.
 - w+: read and write only, empty original file content, create new file if the file does not exist.
 - a: append only. return NULL if the file does not exist.
 - a+: append only, create new file if the file does not exist.
+- for all above modes, if the file to deal with is a binary file, add a 'b' behind. For example, for mode 'r', use 'rb' for binary file.
 </details>
 
 - fclose(FILE *stream) : close the file opened. Example:
@@ -531,3 +532,26 @@ while (buf[++i] != 0) {
 }
 fclose(fp); //a.txt now contains Hello World
 ```
+
+- int fgetc(FILE *stream): read one char from file pointed by stream, return teh char read if successful, return -1 otherwise.Example:
+```c
+char buf[128] = "";
+FILE *fd = fopen("a.txt", 'r');
+while ((buf[i++] = fgetc(fd)) != -1);
+// or equivalently
+while ((buf[i++] = fgetc(fd)) != EOF); // EOF == -1
+fclose(fd);
+// Note: -1 sometimes may be not suitable for checking end of file since some binary file can contains value -1. Thus, the method feof() is useful.
+```
+- int feof(FILE *stream): check if the file is read until the end. return non zero if the file is end, 0 otherwise. Example:
+```c
+char buf[128] = "";
+FILE *fd = fopen("a.txt", 'r');
+int i = 0;
+do {
+    buf[i++] = fgetc(fd);
+} while (feof(fd) == 0 && i < sizeof(buf)); 
+fclose(fd);
+```
+
+- other similar methods (for string): fgets, fputs.
