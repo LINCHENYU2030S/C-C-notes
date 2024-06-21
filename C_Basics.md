@@ -554,4 +554,80 @@ do {
 fclose(fd);
 ```
 
-- other similar methods (for string): fgets, fputs.
+- other similar methods: fgets, fputs，fprintf, fscanf, fwrite, fread.
+
+- size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream): write sizes * nmemb bytes of data from the memory pointed by ptr to the file pointed by stream. Return the value of nmemb if successful, 0 otherwise. Example of use:
+```c
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+typedef struct _std
+{
+    int id;
+    char name[16];
+} STD;
+
+int main() {
+    STD students[3] = {{1, "Alice"}, {2, "Bob"}, {3, "Adam"}};
+    FILE *fp = fopen("a.txt", "w");
+    if (!fp) {
+        perror("");
+        return -1;
+    }
+    // In order for fwrite return the number of bytes written into file,
+    // we use 1 for size and sizeof(students) for nmemb.
+    int bytesWritten = fwrite(students, 1, sizeof(students), fp);
+    fclose(fp);
+    return 0;
+}
+
+```
+
+- size_t fread(const void *ptr, size_t size, size_t nmemb, FILE *stream): read size*nmemb bytes of data from stream into memory region pointed by ptr. return the value of nmemb if successful, 0 otherwise. very similar to fwrite()
+
+- int fseek(FILE *stream, long offset, int whence): move the file pointer. whence will take either of the three values: SEEK_SET(move from the beginning of the file), SEEK_CUR(move from the current position of the file), SEEK_END(move from the end of the file). Return 0 if successful, -1 otherwise.
+
+- long ftell(FILE *stream): return the distance between the beginning of the file and its current file pointer. One example of use: move the pointer to the end of the file and we will know the size of the file.
+
+- int stat(const char *path, struct stat *buf): write the information related to the file specified by "path" into the address of structure given by "buf". The structure type stat is predefined in the header file "<sys/stat.h>". This method will return 0 if action is sucessful, 0 otherwise.
+```c
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int main() {
+    struct stat fileStat;
+    int actionStatus = stat("a.txt", &fileStat);
+    if (actionStatus < 0) {
+        printf("file not found\n");
+    }
+    printf("%d", fileStat.st_size); // print the size of the file by acceesing the element of stat structure.
+    return 0;
+}
+// The "stat" structure is predefined as followed:
+struct stat {
+    dev_t st_dev; // the device number of the file.
+    ino_t st_ino; // node
+    mode_t st_mode; // file type and the limit of storage.
+    nlink_t st_nlink; // number of hard link connected to this file, initial value is 1.
+    uid_t st_uid; // user id
+    gid_t st_gid; // group id
+    dev_t st_rdev; // device type. if this file is a device file, then it's same as device number.
+    off_t st_size; //number of bytes inside this file
+    unsigned long st_blksize; //file system I/O buffer size
+    unsigned long st_block; // number of blocks
+    time_t st_atime; // last access time.
+    time_t st_mtime; // last edit time
+    time_t st_ctime; // last change(property) time
+};
+```
+
+#### Notes for file buffer:
+- There are 3 ways to empty buffer:
+    - when the buffer is full.
+    - use fflush method to forcefully empty.
+    - when the process ends.
+
+- There is no buffer for stdout in Windows. There is a buffer for stdout in linux.
+
+- No use of fflush for stdin.
