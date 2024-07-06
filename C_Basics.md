@@ -353,7 +353,65 @@ int main(int argc, char *argv[]) {
 }
 ```
 
+- function name as a pointer to a memory block: when we define a function, the function name is actually a constant to the address of the function definition block in the memory. That means if you have the address of the function, you can also make the function call as if you are using the function name. For example:
+```c
+void fun() {
+    printf("Hello World!");
+}
 
+int main(int argc, char *argv[]) {
+    printf("%d", fun); // print the address of the function
+    void (*fun_p) () = (void (*) ()) fun; // define the function pointer accordding to its method signature.
+    fun_p(); //call fun() using the address of this function
+    return 0;
+}
+```
+- several ways to define function pointer:
+```c
+int func(int a, char b) {
+    printf("hello world!\n");
+}
+int main() {
+    // method 1
+    typedef void(FUNC_TYPE) (int, char);
+    FUNC_TYPE *func_pointer = func;
+    func_pointer(1, 'a');
+
+    // method 2
+    typedef void(*FUNC_TYPE) (int, char); // FUNC_TYPE itself is a function pointer type
+    FUNC_TYPE func_pointer2 = func;
+    func_pointer2(1, 'a');
+
+    // method 3
+    void (*func_pointer3) (int, char) = func;
+    func_pointer3(1, 'a');
+}
+```
+
+- defining function pointers array:
+```c
+int func1() {
+    printf("func1\n");`
+}
+int func2() {
+    printf("func2\n");
+}
+int func3() {
+    printf("func3\n");
+}
+int main() {
+    void(*func_pointers[3])();
+
+    func_pointers[0] = func1;
+    func_pointers[1] = func2;
+    func_pointers[2] = func3;
+
+    for (int i = 0; i < 3; i++) {
+        func_pointers[i]();
+    }
+    return 0;
+}
+```
 --------------------------------------------------------
 ### Some useful string processing methods
 - strcpy(char *dest, char *src): copy char starting from the address "src" until \0 is encountered (such \0 is also included in copying) to the address starting from "dest"(by overwriting).
