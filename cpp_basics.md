@@ -5,6 +5,7 @@
     * [struct in cpp ](#struct-in-c)
     * [constant variable in cpp ](#constant-variable-in-c)
     * [Pass by reference ](#pass-by-reference)
+    * [Inline method ](#inline-method)
 --------------------------------------------------------
 
 ### Name Space
@@ -236,3 +237,12 @@ int b = 10;
 int &a = b; // compiler will do int * const a = &b;
 a = 20; // behind the scene: *a = 20;
 ```
+
+--------------------------------------------------------
+### Inline Method
+
+- How does inlining a method can POSSIBLY increase the efficiency of a program: when inlining a method, the compiler will replace everywhere where the method is called with its detail instruction so that the cost for functional call is saved during execution(does not need to set up call stack frame).
+
+- What kind of method should not inline: function with high complexity (e.g. many if-else statement, loop etc), function will large piece of code/instruction. we encourage inlining small, frequently called method.
+
+- When large function is inlined (and the compiler does not reject it), the binary file after compilatin will become very big, leading to code bloat. This will possibly slow down the efficiency of the program since the miss rate for instructions cache (Icache) will possibly increase since it now cannot hold most of the instructions.
