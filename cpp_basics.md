@@ -6,6 +6,9 @@
     * [constant variable in cpp ](#constant-variable-in-c)
     * [Pass by reference ](#pass-by-reference)
     * [Inline method ](#inline-method)
+    * [Method overloading ](#method-overloading)
+    * [Constructor and destructor ](#constructor-and-destructor)
+    * [Shallow copy vs Deep copy ](#shallow-copy-vs-deep-copy)
 --------------------------------------------------------
 
 ### Name Space
@@ -246,3 +249,248 @@ a = 20; // behind the scene: *a = 20;
 - What kind of method should not inline: function with high complexity (e.g. many if-else statement, loop etc), function will large piece of code/instruction. we encourage inlining small, frequently called method.
 
 - When large function is inlined (and the compiler does not reject it), the binary file after compilatin will become very big, leading to code bloat. This will possibly slow down the efficiency of the program since the miss rate for instructions cache (Icache) will possibly increase since it now cannot hold most of the instructions.
+
+- member function of a class is inlined by default.
+
+
+--------------------------------------------------------
+### Method Overloading
+
+- Purpose: method overloading allows more flexibility for programmer to name functions. Functions with different method signature can have same name. When the user invoke such function, the compiler will find the one that match the type of argument passed into.
+
+- Why is overloading not allowed in C but allowed in C++? : When C++ code is compiled to assembly code, C++ compiler will rename the functions based on function name given by the programmer and method signature. Thus, those overloaded functions will have different name during assembly stage.
+
+- Invoke C function in C++: When you write a functin in C and you want to invoke it in C++, the C++ may not be able to find the method since C++ assume the function called has another name in assembly stage. If you want to invoke it, you have to tell the compiler when defining that function written in C:
+
+```c
+// In header file:
+// Tell the compiler if you want to invoke the below method in C++, you must find it in the same way that C does.
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+    void func();
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+--------------------------------------------------------
+### Constructor and destructor
+- In cpp, the compiler will insert call for constructor method of a class automatically everytime we instantiate an object of that class. Similarly, when the memory region where an object of a class is no longer valid, the compiler will insert a call for the desctructor method of that class to "delete" that object. Destructor is especially important when there is memory allocated for one of member variable of the object since we need to free the space allocated.
+
+- There are default constructor and desctructor for a class when programmer does not provide their own constructor and destructor. The default constructor and desctructor are just empty method.
+
+- The constructor(s) and destructor must be public.
+
+- There is also a default copy constructor where we pass a reference of other object of the same class to the constructor so that we can create another "similar" object of the same class. The defailt copy constructor simply assign each of the member variable from given object to the new one.
+
+- Some example use of constructor(the destructor will automatically called when the main method calling stack is no longer used in the following case):
+
+```cpp
+class Maker
+{
+    public:
+    Maker() { 
+        //...
+    }
+    Maker(int k) {
+        a = k;
+    }
+
+    Maker(const Maker &m) { //Note that the & here is important, if not it will lead to infinte loop of copying.
+        a = m.a;
+    }
+    ~Maker() {
+        //...
+    }
+
+    private:
+    int a;
+}
+
+int main() {
+    Maker m; //constructor without parameter is called.
+    Maker m1(10) //constructor with one parameter of type int is called.
+    Maker m2(m1); // copying constructor is called.
+
+    // Not that often used:
+    Maker m4 = Maker(10); // constructor with one parameter of type int is called.
+    Maker m3 = m2; // copying constructor is called.
+    Maker m5 = 10; // equivalent to Maker m5 = Maker(10)
+    
+    Maker m6; //constructor without parameter is called.
+    m6 = m5; // there is no constructor called, this is an assignment operation.
+}
+```
+
+- In the example above, the parameter for copying constructor must be const TYPE &NAME. Consider the case where the copying constructor takes in type const Maker m instead:
+```cpp
+class Maker {
+    public:
+    Maker() {
+        //...
+    }
+    Maker(int k) {
+        a = k;
+    }
+
+    Maker(const Maker m) { 
+        //error, here is why:
+        // when we do something like Maker m2(m1); to call copying constructor
+        // the next instructor will be argument passing: const Maker m = m1; which is also a copying construction action, thus the copying constructor is called again.
+        // copying constructor is called again and again,....infinite loop
+    }
+
+    ~Maker() {
+        //...
+    }
+
+    private:
+    int a;
+
+}
+```
+
+- Member Initializer List: 
+(1) Allow a class to call a particular constructor to initialize its member object
+(2) Allow value to be passed through a class to its member's constructor.
+(3) Note: if member initializer list is used for one constructor, it must be used for all constructor.
+(4) if member initializer list is not used, the member constructor without parameter will be called automatically.
+For example:
+```cpp
+#include <iostream>
+using namespace std;
+class Apple
+{
+    public:
+    Apple(int a) {
+        //...
+        cout<<"Apple constructor is called"<<endl;
+    }
+
+    ~Apple() {
+        cout<<"Apple destructor is called"<<endl;
+    }
+}
+
+class Orange
+{
+    public:
+    Orange(int b) {
+        //...
+        cout<<"Orange constructor is called"<<endl;
+    }
+
+    ~Orange() {
+        cout<<"Orange destructor is called"<<endl;
+    }
+}
+
+class Stall
+{
+    public:
+    Stall(int a, int b): Apple(a), Orange(b)
+    {
+        //...
+        cout<<"Stall constructor is called"<<endl;
+    }
+
+    ~Stall() {
+        cout<<"Stall destructor is called"<<endl;
+    }
+    private:
+    Apple apple;
+    Orange orange;
+}
+
+int main()
+{
+    Stall stall(1, 2);
+    //result:
+    /*
+    Apple constructor is called
+    Orange constructor is called
+    Stall constructor is called
+    Stall desctructor is called
+    Orange destructor is called
+    Apple destructor is called.
+    */
+}
+```
+
+### Shallow Copy vs Deep Copy
+
+- When we do not provide our own copying constructor for a class we implemented, the default copying constructor will just do simple assignment of fields from one instance to the newly created one. This is what we call as "shallow copy". The aliasing issue will occur in this case. Example:
+```cpp
+class Student {
+    public:
+    Student(const char * name, int age) {
+        studentName = (char *) malloc(strlen(name) + 1);
+        strcpy(studentName, name);
+        studentAge = age;
+    }
+
+    char * getStudentName() {
+        return studentName;
+    }
+
+    int getStudentAge() {
+        return studentAge;
+    }
+
+    void printStudent() {
+        printf("student name: %s ", studentName);
+        printf("student age: %d\n", studentAge);
+    }
+
+    ~Student() {
+        if (studentName != NULL) {
+            free(studentName);
+            studentName = NULL;
+        }
+    }
+    private:
+    char * studentName;
+    int studentAge;
+};
+
+int main() {
+    Student s1("hello world", 10);
+    Student s2(s1);
+    s1.printStudent(); //student name: hello world student age: 10
+    s2.printStudent(); //student name: hello world student age: 10
+    strcpy(s1.getStudentName(), "world");
+    s1.printStudent();//student name: world student age: 10
+    s2.printStudent();//student name: world student age: 10
+
+    // at the end, there will be an error since the heap memory region pointed by both s1.studentName and s2.studentName are freed up twice!
+}
+```
+
+- To achieve deep copy, we can simple reimplement the copying constructor:
+```cpp
+class Student {
+
+    /*
+
+    ...
+
+    */
+    Student (const student &otherStudent) {
+        studentName = (char *) malloc(strlen(otherStudent.studentName) + 1);
+        strcpy(studentName, otherStudent.studentName);
+        studentAge = otherStudent.studentAge;
+    }
+    private:
+    char * studentName;
+    int studentAge;
+};
+
+int main() {
+    Student s1("hello world", 10);
+    Student s2(s1); // s1.studentName and s2.studentName are stored at separate memory region.
+    // No memory related issue occur since no memory region is freed more than once.
+}
+```
